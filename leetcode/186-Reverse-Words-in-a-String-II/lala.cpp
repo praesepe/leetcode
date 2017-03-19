@@ -23,7 +23,6 @@ public:
 
 		// reverse by space
 		string::size_type end_pos = 0, start_pos = 0;
-		end_pos = s.find(' ', start_pos);
 		while (start_pos < s.size()) {
 			end_pos = s.find(' ', start_pos);
 			end_pos = end_pos == string::npos ? s.size() : end_pos;
