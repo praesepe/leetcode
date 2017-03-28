@@ -46,10 +46,10 @@ public:
 		}
 
 		//
-		for (string::size_type i = 1; i < s.size(); i++) {
-			DpEntry* previous_entry = &dptable[i - 1];
+		for (string::size_type i = 0; i < s.size(); i++) {
+			DpEntry* previous_entry = i == 0 ? &result : &dptable[i - 1];
 			DpEntry* current_entry = &dptable[i];
-			char previous_char = s[i - 1];
+			char previous_char = i == 0 ? '\0' : s[i - 1];
 			char current_char = s[i];
 
 			if (previous_entry->occurence_set.size() < MOST_OCCURRENCE) {
@@ -63,7 +63,7 @@ public:
 				current_entry->occurence_set = previous_entry->occurence_set;
 			} else {
 				current_entry->length = previous_entry->last_occurence_count + 1;
-				current_entry->start_index = i - 1;
+				current_entry->start_index = i - previous_entry->last_occurence_count;
 				current_entry->occurence_set.insert(previous_char);
 				current_entry->occurence_set.insert(current_char);
 			}
@@ -77,6 +77,8 @@ public:
 
 int main() {
 	vector<string> testcases;
+	testcases.push_back("");
+	testcases.push_back("a");
 	testcases.push_back("eceba");
 	testcases.push_back("aaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaa");
 	testcases.push_back("abbcccdddd");
