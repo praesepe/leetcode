@@ -25,7 +25,7 @@ public:
 
 		int carry = 0;
 		while (p1 != NULL || p2 != NULL) {
-			int sum = carry + getValue(p1) + getValue(p2);
+			int sum = carry + this->getValue(p1) + this->getValue(p2);
 			int val = sum % 10;
 			carry = sum / 10;
 
@@ -36,8 +36,8 @@ public:
 				walker = walker->next;
 			}
 
-			listNext(&p1);
-			listNext(&p2);
+			this->listNext(&p1);
+			this->listNext(&p2);
 		}
 
         if (carry > 0) {
