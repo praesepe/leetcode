@@ -21,20 +21,17 @@ private:
     }
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode *result = NULL, *walker = NULL, *p1 = l1, *p2 = l2;
+        ListNode *dummy, *walker, *p1 = l1, *p2 = l2;
 
+		walker = dummy = new ListNode(0);
 		int carry = 0;
 		while (p1 != NULL || p2 != NULL) {
 			int sum = carry + this->getValue(p1) + this->getValue(p2);
 			int val = sum % 10;
 			carry = sum / 10;
 
-			if (!walker) {
-				result = walker = new ListNode(val);
-			} else {
-				walker->next = new ListNode(val);
-				walker = walker->next;
-			}
+			walker->next = new ListNode(val);
+			walker = walker->next;
 
 			this->listNext(&p1);
 			this->listNext(&p2);
@@ -44,6 +41,6 @@ public:
             walker->next = new ListNode(carry);
         }
 
-        return result;
+        return dummy->next;
     }
 };
