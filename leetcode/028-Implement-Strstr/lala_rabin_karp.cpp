@@ -2,6 +2,8 @@
 
 using namespace std;
 #define BASE 8
+#define PRIME 100000004987
+
 class Solution {
 public:
 	int strStr(string haystack, string needle) {
@@ -14,40 +16,39 @@ public:
 			return 0;
 		}
 
-		// compute pattern hash
+		// compute hash
 		uint64_t patternHash = 0;
+		uint64_t searchHash = 0;
 		for (size_t i = 0; i < needle.size(); i++) {
-			patternHash = ((patternHash << BASE) | needle[i]);
+			patternHash = ((patternHash << BASE) + needle[i]) % PRIME;
+			searchHash = ((searchHash << BASE) + haystack[i]) % PRIME;
 		}
 
-		//
-		int ROLLING = BASE * (needle.size() - 1) > 64 - BASE ?
-			64 - BASE :
-			BASE * (needle.size() - 1);
+		// compute rolling
+		uint64_t rolling = 1;
+		for (size_t i = 0; i < needle.size() - 1; i++) {
+			rolling = (rolling << BASE) % PRIME;
+		}
 
 		// main
-		uint64_t searchHash = 0;
-		for (size_t i = 0; i < haystack.size(); i++) {
-			// rolling hash
-			searchHash = (((((searchHash >> ROLLING) << ROLLING) ^ searchHash) << BASE) | haystack[i]);
-
-			if (i + 1 < needle.size()) continue;
-			if (searchHash != patternHash) continue;
-
+		for (size_t i = 0; i < haystack.size() - needle.size() + 1; i++) {
 			// check match
-			bool match = true;
-			int startIndex = i - needle.size() + 1;
-			for (size_t j = 0; j < needle.size(); j++) {
-				if (haystack[startIndex + j] != needle[j]) {
-					match = false;
-					break;
+			if (searchHash == patternHash) {
+				bool match = true;
+				for (size_t j = 0; j < needle.size(); j++) {
+					if (haystack[i + j] != needle[j]) {
+						match = false;
+						break;
+					}
 				}
+				if (match) return i;
 			}
-			if (match) {
-				return startIndex;
-			}
+
+			searchHash = (searchHash + (PRIME << BASE) - haystack[i] * rolling) % PRIME;
+			searchHash = ((searchHash << BASE) + haystack[i + needle.size()]) % PRIME;
 		}
 
 		return -1;
 	}
 };
+
