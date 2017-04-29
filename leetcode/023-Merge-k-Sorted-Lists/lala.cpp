@@ -12,14 +12,13 @@ struct ListNode {
 };
 
 struct HeapNode {
-	ListNode* node;
-	int which;
+    ListNode* node;
 
-	HeapNode(ListNode* n, int w) : node(n), which(w) {}
+    HeapNode(ListNode* n) : node(n) {}
 };
 
 bool operator < (const HeapNode &h1, const HeapNode &h2) {
-	return h2.node->val < h1.node->val;
+    return h2.node->val < h1.node->val;
 }
 
 class Solution {
@@ -29,12 +28,9 @@ public:
 		ListNode *dummy = new ListNode(0), *walker = dummy;
 
 		// initilize
-		vector<ListNode*> ptr(lists.size());
 		for (size_t i = 0; i < lists.size(); i++) {
-			ptr[i] = lists[i];
-			if (ptr[i]) {
-				pq.push(HeapNode(ptr[i], i));
-				ptr[i] = ptr[i]->next;
+			if (lists[i]) {
+				pq.push(HeapNode(lists[i]));
 			}
 		}
 
@@ -43,12 +39,10 @@ public:
 			HeapNode h = pq.top();
 			walker->next = h.node;
 			walker = walker->next;
-
-			if (ptr[h.which]) {
-				pq.push(HeapNode(ptr[h.which], h.which));
-				ptr[h.which] = ptr[h.which]->next;
-			}
 			pq.pop();
+			if (h.node->next) {
+				pq.push(HeapNode(h.node->next));
+			}
 		}
 
 		return dummy->next;
