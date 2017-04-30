@@ -1,28 +1,23 @@
-class Solution {
+ss Solution {
 public:
-    bool isPalindrome(int x) {
-        if (x < 0) return false;
-        int div = 1;
-        int tmp = x;
-        // for getting 1st digit
-        while((tmp = tmp/10)> 0)
+    vector<int> plusOne(vector<int>& digits) {
+        int plus_num = 1;
+        int tmp;
+        auto it = digits.rbegin();
+        while(it != digits.rend())
         {
-            div = div *10;
+            tmp = *it + plus_num;
+            *it = tmp % 10;
+            plus_num = tmp / 10;
+            ++it; 
         }
-
-        while(div >= 10){
-                                        //e.g. case:2053333502
-            if(((x / div) == x % 10) || (x < div && x % 10 ==0))
-            {
-                x = x % div;
-                x = x / 10;
-            
-                div = div/100;
-            }else
-            { 
-                return false;    
-            }
+       
+        if( plus_num == 1 ){
+            digits.resize(digits.size()+1);
+            digits.at(0) = 1;
         }
-        return true;
-    }   
+  
+        return digits;
+    }
 };
+
