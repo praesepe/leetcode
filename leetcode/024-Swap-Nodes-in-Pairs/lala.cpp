@@ -12,42 +12,25 @@ struct ListNode {
 class Solution {
 public:
 	ListNode* swapPairs(ListNode* head) {
-		ListNode* result = NULL, *p = NULL, *c, *cn, *cnn, *walker;
-
-		//    walker
-		// p->c->cn->cnn
-		//
-		//           walker
-		// p->cn->c->cnn
-		walker = head;
-		while (walker) {
-			c = walker;
-			cn = c->next;
-			cnn = cn ? cn->next : NULL;
-
-			//  c->cnn
-			// cn
-			c->next = cnn;
-
-			// cn->c->cnn
-			if (cn) {
-				cn->next = c;
-			}
-
-			// p->cn->c->cnn
-			if (p) {
-				p->next = cn ? cn : c;
-			}
-
-			//
-			if (!result) {
-				result = cn ? cn : c;
-			}
-
-			p = c;
-			walker = cnn;
+		if (!head) {
+			return NULL;
 		}
 
-		return result;
+		ListNode *previous, *current, *current_next;
+		ListNode *result = head->next;
+
+		current = previous = head;
+		while (current && current->next) {
+			current_next = current->next;
+
+			previous->next = current_next;
+			current->next = current_next->next;
+			current_next->next = current;
+
+			previous = current;
+			current = current->next;
+		}
+
+		return result ? result : head;
 	}
 };
