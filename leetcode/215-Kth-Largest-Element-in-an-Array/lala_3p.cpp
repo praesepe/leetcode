@@ -13,8 +13,35 @@ private:
 		return true;
 	}
 
+	int find_median_index(vector<int>& nums, int start, int end) {
+		if (end - start < 2) {
+			return start;
+		}
+
+		int mid = start + 1;
+		if (nums[end] >= nums[mid]) {
+			if (nums[mid] >= nums[start]) {
+				return mid;
+			} else if (nums[end] >= nums[start]) {
+				return start;
+			} else {
+				return end;
+			}
+		} else {
+			if (nums[end] >= nums[start]) {
+				return end;
+			} else if (nums[mid] >= nums[start]) {
+				return start;
+			} else {
+				return mid;
+			}
+		}
+	}
+
 	int partition(vector<int>& nums, int p, int r) {
-		int target = nums[r];
+		int median_index = this->find_median_index(nums, p, r);
+		int target = nums[median_index];
+		swap(nums[median_index], nums[r]);
 
 		int i = p - 1;
 		for (int j = p; j < r; j++) {
