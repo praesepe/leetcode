@@ -4,8 +4,8 @@ public class Solution {
             return null;
         }
 
-        ListNode temp = new ListNode(0);
-        ListNode result = temp;
+        ListNode result = new ListNode(0);
+        ListNode resultPointer = result;
 
         int tenDigits = 0;
         while (l1 != null && l2 != null) {
@@ -13,24 +13,27 @@ public class Solution {
             tenDigits = digits / 10;
             digits %= 10;
 
-            result.next = new ListNode(digits);
+            resultPointer.next = new ListNode(digits);
             l1 = l1.next;
             l2 = l2.next;
-            result = result.next;
+            resultPointer = resultPointer.next;
         }
 
         ListNode last = l1 == null ? l2 : l1;
         while (last != null) {
-            int digits = last.val + result.val + tenDigits;
+            int digits = last.val + tenDigits;
             tenDigits = digits / 10;
             digits %= 10;
-            result.next = new ListNode(digits);
+            resultPointer.next = new ListNode(digits);
+            resultPointer = resultPointer.next;
+            last = last.next;
         }
 
         if (tenDigits != 0) {
-            result.next = new ListNode(tenDigits);
+            System.out.println(tenDigits);
+            resultPointer.next = new ListNode(tenDigits);
         }
 
-        return temp.next;
+        return result.next;
     }
 }
