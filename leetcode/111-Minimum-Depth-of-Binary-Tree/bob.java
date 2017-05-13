@@ -8,9 +8,9 @@
  * }
  */
 public class Solution {
-    public int length(TreeNode root,int depth) {
+    public int length(TreeNode root) {
         if(root == null) {
-            return depth;
+            return 0;
         }
         
         int current = 1;
@@ -18,21 +18,22 @@ public class Solution {
             return current;
         }
         
+        //only one path
         if(root.left == null) {
-            return current + length(root.right, depth);
+            return current + length(root.right);
         }
         
         if(root.right == null) {
-            return current + length(root.left, depth);
+            return current + length(root.left);
         }
         
-        int leftMinDepth = length(root.left, depth);
-        int rightMinDepth = length(root.right, depth);
+        int leftMinDepth = length(root.left);
+        int rightMinDepth = length(root.right);
         
         return Math.min(leftMinDepth,rightMinDepth) + current;
     }
     
     public int minDepth(TreeNode root) {
-        return length(root, 0);
+        return length(root);
     }
 }
