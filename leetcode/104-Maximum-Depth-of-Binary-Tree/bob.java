@@ -13,8 +13,9 @@ public class Solution {
             return maxDepth;
         }
         
-        int leftMaxDepth = root.left == null ?  maxDepth : length(root.left,maxDepth) + 1;
-        int rightMaxDepth = root.right == null ?  maxDepth : length(root.right,maxDepth) + 1;
+        maxDepth += 1;
+        int leftMaxDepth = root.left == null ?  maxDepth : length(root.left, maxDepth);
+        int rightMaxDepth = root.right == null ?  maxDepth : length(root.right, maxDepth);
         
         return rightMaxDepth > leftMaxDepth ? rightMaxDepth : leftMaxDepth;
     }
@@ -24,6 +25,6 @@ public class Solution {
             return 0;
         }
         
-        return length(root, 1);
+        return length(root, 0);
     }
 }
