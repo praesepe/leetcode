@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
 	string reverseWords(string s) {
-		string result(s.size(), NULL);
+		string result(s.size() + 1, NULL);
 
 		int start_index = 0;
 		for (size_t i = 0; i <= s.size(); i++) {
@@ -17,9 +17,10 @@ public:
 				result[start_index++] = s[j];
 			}
 
-			if (i != s.size()) result[start_index++] = ' ';
+			result[start_index++] = ' ';
 		}
 
+		result[s.size()] = NULL;
 		return result;
 	}
 };
