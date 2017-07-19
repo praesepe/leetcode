@@ -1,6 +1,6 @@
 #include <vector>
 #include <string.h>
-#include <limit.h>
+#include <limits.h>
 
 using namespace std;
 
@@ -9,35 +9,34 @@ using namespace std;
 
 class Solution {
 public:
-	int arrayPairSum(vector<int>& nums) {
-		int count[MAX_SIZE];
-		memset(count, 0, sizeof(count));
+int arrayPairSum(vector<int>& nums) {
+	int count[MAX_SIZE];
+	memset(count, 0, sizeof(count));
 
-		// sorting
-		int max_value = INT_MIN, min_value = INT_MAX;
-		int start_index = 0, end_index = 0;
-		for (const auto num : nums) {
-			if (num >= max_value) {
-				max_value = num;
-				end_index = num + OFFSET;
-			}
+	// sorting
+	int max_value = INT_MIN, min_value = INT_MAX;
+	for (const auto num : nums) {
+		if (num >= max_value) max_value = num;            
+		if (num <= min_value) min_value = num;
 
-			if (num >= min_value) {
-				min_value = num;
-				start_index = num + OFFSET;
-			}
-			count[num + OFFSET]++;
-		}
-
-		// compute result
-		int counter = 0, result = 0;
-		for (int i = start_index; i <= end_index; i++) {
-			for (int j = 0; j < count[i]; j++) {
-				result += (counter % 2 == 0) ? i - OFFSET : 0;
-				counter++;
-			} 
-		}
-
-		return result;
+		count[num + OFFSET]++;
 	}
+
+	// compute result
+	int result = 0, remain = 0, previous_value = 0;
+	int start_index = min_value + OFFSET, end_index = max_value + OFFSET;
+	for (int i = start_index; i <= end_index; i++) {
+		if (count[i] == 0) continue;
+
+		int total_count = count[i] - remain;
+		int times = total_count / 2;
+		int value = i - OFFSET;
+
+		result += (value * times) + previous_value;
+		remain = total_count % 2;
+		previous_value = remain == 1 ? value : 0;
+	}
+
+	return result;
+}
 };
