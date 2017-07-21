@@ -9,11 +9,10 @@ public:
         if (s.size() == 1) return s[0] == '0' ? 0 : 1;
         /*
          *  ways_2 ways_1
-         *  ....   last   current
+         *  ............. current
          */
         int result;
         int ways_2 = 1, ways_1 = s[0] == '0' ? 0 : 1;
-        char last = s[0];
         for (size_t i = 1; i < s.size(); i++) {
             int current = s[i] - '0';
             int num = stoi(s.substr(i - 1, 2));
@@ -22,7 +21,6 @@ public:
 
             ways_2 = ways_1;
             ways_1 = result;
-            last = current;
         }
         return result;
     }
