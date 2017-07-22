@@ -64,12 +64,6 @@ public:
 
 int main()
 {
-	string s1 = "()())()";
-
-	///Solution slt;
-	//vector<string> result = slt.removeInvalidParentheses(s1);
-
-
 	vector<string> s = {
 		"()())()",
 		"(a)())()",
