@@ -65,8 +65,8 @@ public:
 		int count[BUCKET_SIZE];
 		runs[0] = nums;
 		for (int i = 0; i < loop_count; i++) {
-			vector<int> &src = runs[i % 2];
-			vector<int> &dest = runs[(i + 1) % 2];
+			vector<int> &src = runs[i & 0x1];
+			vector<int> &dest = runs[(i + 1) & 0x1];
 			int shift = i * BITS_BASE;
 
 			// counting
@@ -77,7 +77,7 @@ public:
 		}
 
 		// compute result
-		vector<int> &target = runs[loop_count % 2];
+		vector<int> &target = runs[loop_count & 0x1];
 		int result = INT_MIN;
 		int previous = target[0];
 
