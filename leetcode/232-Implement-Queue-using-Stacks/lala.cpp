@@ -1,7 +1,6 @@
 #include <stack>
 
 using namespace std;
-
 class MyQueue {
 private:
 	int get_front() {
@@ -22,6 +21,10 @@ public:
 
 	/** Push element x to the back of queue. */
 	void push(int x) {
+		if (this->_filo.empty()) {
+			this->_front = x;
+		}
+
 		this->_filo.push(x);
 	}
 
@@ -35,7 +38,7 @@ public:
 
 	/** Get the front element. */
 	int peek() {
-		return this->get_front();
+		return this->_fifo.empty() ? this->_front : this->_fifo.top();
 	}
 
 	/** Returns whether the queue is empty. */
@@ -43,6 +46,7 @@ public:
 		return this->_filo.empty() && this->_fifo.empty();
 	}
 private:
+	int _front;
 	stack<int> _filo;
 	stack<int> _fifo;
 };
