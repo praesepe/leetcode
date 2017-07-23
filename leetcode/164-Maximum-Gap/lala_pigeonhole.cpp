@@ -16,13 +16,11 @@ public:
 
 		int maxValue = *max_element(nums.begin(), nums.end());
 		int minValue = *min_element(nums.begin(), nums.end());
-		int interval = max(1, int(((maxValue - minValue) / (nums.size() - 1))));
+		int interval = max(1, int((maxValue - minValue) / (nums.size() + 1)));
 
 		// setup buckets
-		vector<Bucket> buckets((maxValue - minValue) / interval + 1) ;
+		vector<Bucket> buckets(((maxValue - minValue) / interval) + 1) ;
 		for (const auto num : nums) {
-			if (num == minValue || num == maxValue) continue;
-
 			int index = (num - minValue) / interval;
 			buckets[index].is_empty = false;
 			buckets[index].min = min(buckets[index].min, num);
@@ -39,6 +37,6 @@ public:
 			previousMax = bucket.max;
 		}
 
-		return max(result, maxValue - previousMax);
+		return result;
 	}
 };
