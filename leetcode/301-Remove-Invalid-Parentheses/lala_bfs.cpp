@@ -60,13 +60,13 @@ private:
 					q.push(SearchNode(sn.s, !sn.reversed));
 					break;
 				default: {
-							 char search_char = sn.reversed ? '(' : ')';
-							 for (int i = 0; i <= failed_position; i++) {
-								 if (sn.s[i] != search_char) continue;
-								 string removed_string = sn.s.substr(0, i) + sn.s.substr(i + 1);
-								 q.push(SearchNode(removed_string, sn.reversed));
-							 }
-						 }
+					char search_char = sn.reversed ? '(' : ')';
+					for (int i = 0; i <= failed_position; i++) {
+						if (sn.s[i] != search_char) continue;
+						string removed_string = sn.s.substr(0, i) + sn.s.substr(i + 1);
+						q.push(SearchNode(removed_string, sn.reversed));
+					}
+				}
 			}
 
 			q.pop();
