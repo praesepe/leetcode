@@ -67,7 +67,7 @@ private:
 					break;
 				case REVERSE:
 					reverse(sn.s.begin(), sn.s.end());
-					this->_search_queue.push(SearchNode(sn.s, !sn.reversed));
+					this->next(sn.s, !sn.reversed);
 					break;
 				default: {
 					char search_char = sn.reversed ? '(' : ')';
