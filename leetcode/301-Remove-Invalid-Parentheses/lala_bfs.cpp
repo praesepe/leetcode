@@ -21,6 +21,20 @@ struct SearchNode {
 
 class Solution {
 private:
+	bool next(string s, bool reversed) {
+		// check visited
+		if (this->_visited[reversed].find(s) !=
+			this->_visited[reversed].end()) {
+			return false;
+		}
+
+		// search child
+		this->_visited[reversed].insert(s);
+		this->_search_queue.push(SearchNode(s, reversed));
+
+		return true;
+	}
+
 	int find_failed_position(string s, bool is_reversed) {
 		char plus_char = !is_reversed ? '(' : ')';
 		char minus_char = !is_reversed ? ')' : '(';
@@ -39,14 +53,10 @@ private:
 		return count == 0 ? FOUND : REVERSE;
 	}
 
-	void bfs(queue<SearchNode> &q) {
-		while (!q.empty()) {
-			SearchNode& sn = q.front();
-			if (this->_visited[sn.reversed].find(sn.s) != this->_visited[sn.reversed].end()) {
-				q.pop();
-				continue;
-			}
-			this->_visited[sn.reversed].insert(sn.s);
+	void bfs() {
+		while (!this->_search_queue.empty()) {
+			SearchNode sn = this->_search_queue.front();
+			this->_search_queue.pop();
 
 			// check
 			int failed_position = this->find_failed_position(sn.s, sn.reversed);
@@ -57,45 +67,37 @@ private:
 					break;
 				case REVERSE:
 					reverse(sn.s.begin(), sn.s.end());
-					q.push(SearchNode(sn.s, !sn.reversed));
+					this->_search_queue.push(SearchNode(sn.s, !sn.reversed));
 					break;
 				default: {
 					char search_char = sn.reversed ? '(' : ')';
 					for (int i = 0; i <= failed_position; i++) {
+						// not a target char
 						if (sn.s[i] != search_char) continue;
+
+						// next
 						string removed_string = sn.s.substr(0, i) + sn.s.substr(i + 1);
-						q.push(SearchNode(removed_string, sn.reversed));
+						this->next(removed_string, sn.reversed);
 					}
 				}
 			}
-
-			q.pop();
 		}
-
 	}
 public:
 	vector<string> removeInvalidParentheses(string s) {
-		//
+		// clean
 		this->_answers.clear();
+		this->_search_queue = queue<SearchNode>();
 		this->_visited = {{ true, {} }, { false, {} }};
 
-		//
-		queue<SearchNode> q;
-
-		int failed_position = this->find_failed_position(s, false);
-		switch (failed_position) {
-			case FOUND:
-				return { s };
-			case REVERSE:
-				reverse(s.begin(), s.end());
-			default:
-				q.push(SearchNode(s, failed_position == REVERSE));
-				this->bfs(q);
-		}
+		// search
+		this->next(s, false);
+		this->bfs();
 
 		return this->_answers;
 	}
 private:
 	vector<string> _answers;
+	queue<SearchNode> _search_queue;
 	unordered_map<bool, unordered_set<string>> _visited;
 };

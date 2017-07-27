@@ -1,6 +1,7 @@
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -8,13 +9,37 @@ using namespace std;
 #define FOUND -1
 #define REVERSE -2
 
+struct SearchNode {
+	string s;
+	bool reversed;
+
+	SearchNode(string s, bool reversed) {
+		this->s = s;
+		this->reversed = reversed;
+	}
+};
+
 class Solution {
 private:
+	bool next(string s, bool reversed) {
+		// check visited
+		if (this->_visited[reversed].find(s) !=
+			this->_visited[reversed].end()) {
+			return false;
+		}
+
+		// search child
+		this->_visited[reversed].insert(s);
+		this->_search_stack.push(SearchNode(s, reversed));
+
+		return true;
+	}
+
 	int find_failed_position(string s, bool is_reversed) {
 		char plus_char = !is_reversed ? '(' : ')';
 		char minus_char = !is_reversed ? ')' : '(';
 		int count = 0;
-		// TODO: I think it can be optimized by offseting the starting index
+
 		for (size_t i = 0; i < s.size(); i++) {
 			if (s[i] == plus_char) {
 				count++;
@@ -28,42 +53,52 @@ private:
 		return count == 0 ? FOUND : REVERSE;
 	}
 
-	void search_and_removed(
-			string s, vector<string>& answers,
-			unordered_map<bool, unordered_set<string>>& visited,
-			bool is_reversed
-	) {
-		if (visited[is_reversed].find(s) != visited[is_reversed].end()) return;
+	void dfs() {
+		while (!this->_search_stack.empty()) {
+			SearchNode sn = this->_search_stack.top();
+			this->_search_stack.pop();
 
-		visited[is_reversed].insert(s);
-		char search_char = !is_reversed ? ')' : '(';
-		int failed_position = this->find_failed_position(s, is_reversed);
+			// check
+			int failed_position = this->find_failed_position(sn.s, sn.reversed);
+			switch (failed_position) {
+				case FOUND:
+					if (sn.reversed) reverse(sn.s.begin(), sn.s.end());
+					this->_answers.push_back(sn.s);
+					break;
+				case REVERSE:
+					reverse(sn.s.begin(), sn.s.end());
+					this->next(sn.s, !sn.reversed);
+					break;
+				default: {
+					char search_char = sn.reversed ? '(' : ')';
+					for (int i = 0; i <= failed_position; i++) {
+						// not a target char
+						if (sn.s[i] != search_char) continue;
 
-		switch (failed_position) {
-			case FOUND:
-				if (is_reversed) reverse(s.begin(), s.end());
-				answers.push_back(s);
-				break;
-			case REVERSE:
-				reverse(s.begin(), s.end());
-				this->search_and_removed(s, answers, visited, !is_reversed);
-				break;
-			default:
-				for (int i = 0; i <= failed_position; i++) {
-					if (s[i] != search_char) continue;
-
-					string removed_string = s.substr(0, i) + s.substr(i + 1);
-					this->search_and_removed(removed_string, answers, visited, is_reversed);
+						// next
+						string removed_string = sn.s.substr(0, i) + sn.s.substr(i + 1);
+						this->next(removed_string, sn.reversed);
+					}
 				}
+			}
 		}
 	}
 public:
 	vector<string> removeInvalidParentheses(string s) {
-		vector<string> answers;
-		unordered_map<bool, unordered_set<string>> visited = {{ true, {} }, { false, {} }};
+		// clean
+		this->_answers.clear();
+		this->_search_stack = stack<SearchNode>();
+		this->_visited = {{ true, {} }, { false, {} }};
 
-		this->search_and_removed(s, answers, visited, false);
-		return answers;
+		// search
+		this->next(s, false);
+		this->dfs();
+
+		return this->_answers;
 	}
+private:
+	vector<string> _answers;
+	stack<SearchNode> _search_stack;
+	unordered_map<bool, unordered_set<string>> _visited;
 };
 
