@@ -9,7 +9,8 @@ class Solution {
 			y = q.front().second;
 			q.pop();
 
-			if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size() || grid[x][y] != '1') {
+			if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size() ||
+				grid[x][y] != '1') {
 				continue;
 			}
 

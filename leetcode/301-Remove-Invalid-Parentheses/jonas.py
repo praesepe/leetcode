@@ -23,8 +23,8 @@ class Solution(object):
 
         :param s: the original string
         :type s: str
-        :param s: the modified string
-        :type s: str
+        :param result: the modified string
+        :type result: str
         :param left: the number of left bracket needs to be removed
         :type left: int
         :param right: the number of right bracket needs to be removed
