@@ -31,7 +31,7 @@ private:
 
             // check valid
             if (this->is_valid(s)) {
-                this->_answers.insert(s);
+                this->_answers.push_back(s);
                 found = true;
             }
 
@@ -54,9 +54,6 @@ private:
 public:
     vector<string> removeInvalidParentheses(string s) {
         // clean
-        if (this->is_valid(s)) return {s};
-
-        // clean
         this->_answers.clear();
         this->_visited.clear();
         this->_search_queue = queue<string>();
@@ -66,10 +63,10 @@ public:
         this->_visited.insert(s);
         this->bfs();
 
-        return vector<string>(this->_answers.begin(), this->_answers.end());
+        return this->_answers;
     }
 private:
-    unordered_set<string> _answers;
+    vector<string> _answers;
     unordered_set<string> _visited;
     queue<string> _search_queue;
 };

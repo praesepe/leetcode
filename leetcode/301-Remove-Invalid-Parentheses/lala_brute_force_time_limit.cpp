@@ -48,9 +48,6 @@ private:
 public:
 	vector<string> removeInvalidParentheses(string s) {
 		// clean
-		if (this->is_valid(s)) return {s};
-
-		// clean
 		this->_answers.clear();
 		this->_search_queue = queue<string>();
 
