@@ -12,7 +12,7 @@ public:
     }
 
     /** Adds a word into the data structure. */
-    // O(1)
+    // O(|word|)
     void addWord(string word) {
         size_t size = word.size();
 
@@ -35,7 +35,7 @@ public:
         if (table_itr == lookup.end()) return false;
 
         // check exact match
-        // O(1)
+        // O(|word|)
         unordered_set<string> &s = table_itr->second;
         if (s.find(word) != s.end()) return true;
 
