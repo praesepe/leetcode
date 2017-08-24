@@ -34,15 +34,15 @@ public:
 			//    ===     current
 			if (current.end <= tail.end) {
 				continue;
-			// ---------     tail
-			//    =========  current
-			} else if (current.start <= tail.end && tail.end <= current.end) {
-				tail.end = current.end;
 			// ---------         tail
 			//             ====  current
 			} else if (current.start > tail.end) {
 				result.push_back(current);
-			}
+			// ---------     tail
+			//    =========  current
+			} else {
+				tail.end = current.end;
+            }
 		}
 
 		return result;
