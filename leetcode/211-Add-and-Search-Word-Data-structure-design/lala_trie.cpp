@@ -1,19 +1,18 @@
+#include <vector>
 #include <string>
-#include <unordered_set>
 
 using namespace std;
 
 #define BRANCH_FACTOR 26
 #define GET_INDEX(c) ((c) - 'a')
-#define DOT_INDEX GET_INDEX('.')
 
 struct TrieNode {
 private:
     void clean(TrieNode* ptr) {
         if (!ptr) return;
 
-        for (auto itr = ptr->jump.begin(); itr != ptr->jump.end(); itr++) {
-            this->clean(ptr->children[*itr]);
+        for (const auto child : this->jump) {
+            this->clean(ptr->children[child]);
         }
 
         if (ptr != this) delete ptr;
@@ -29,7 +28,7 @@ public:
         this->clean(this);
     }
 
-    unordered_set<size_t> jump;
+    vector<size_t> jump;
     TrieNode* children[BRANCH_FACTOR];
     bool is_leaf;
 };
@@ -44,11 +43,11 @@ private:
         if (target[pos] != '.') {
             int index = GET_INDEX(target[pos]);
             return this->dfs(target, pos + 1, root->children[index]);
-        } 
+        }
 
         // wildcard
-        for (auto itr = root->jump.begin() ; itr != root->jump.end(); itr++) {
-            if (this->dfs(target, pos + 1, root->children[*itr])) {
+        for (const auto child : root->jump) {
+            if (this->dfs(target, pos + 1, root->children[child])) {
                 return true;
             }
         }
@@ -68,9 +67,10 @@ public:
         for (const auto c : word) {
             int index = GET_INDEX(c);
             if (ptr->children[index] == nullptr) {
-                ptr->jump.insert(index);
-                ptr->children[index] = new TrieNode();
+                ptr->jump.push_back(index);
+                ptr->children[index] = new TrieNode(); 
             }
+
             ptr = ptr->children[index];
         }
         ptr->is_leaf = true;
