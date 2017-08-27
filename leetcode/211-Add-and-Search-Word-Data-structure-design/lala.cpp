@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -41,15 +42,18 @@ public:
 
         // check wildcard
         // O(|word|)
-        if (word.find('.') == string::npos) return false;
+        vector<size_t> check_pos;
+        for (size_t i = 0; i < size; i++) {
+            if (word[i] != '.') check_pos.push_back(i);
+        }
+        if (check_pos.size() == size) return false;
 
         // worst case, search
         // O(|S| * |word|)
         for (const auto str : s) {
             bool find = true;
-            for (size_t i = 0; i < size; i++) {
-                if (word[i] == '.') continue;
-                if (str[i] != word[i]) {
+            for (const auto pos : check_pos) {
+                if (str[pos] != word[pos]) {
                     find = false;
                     break;
                 }
@@ -57,7 +61,6 @@ public:
 
             if (find) return true;
         }
-
         return false;
     }
 
