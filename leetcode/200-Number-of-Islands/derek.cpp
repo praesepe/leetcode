@@ -5,54 +5,54 @@
 
 using namespace std;
 
-
 class Solution {
 public:
     int numIslands(vector<vector<char>>& grid) {
-		if (grid.size() == 0 || grid[0].size() == 0) {
-			return 0;
-		}
+        if (grid.size() == 0 || grid[0].size() == 0) {
+            return 0;
+        }
 
-        vector<vector<bool>> visit(grid.size(), vector<bool>(grid[0].size(), false));
         int count = 0;
-
         for (int x = 0; x < grid.size(); x++) {
             for (int y = 0; y < grid[x].size(); y++) {
-                if (grid[x][y] == '1' && visit[x][y] == false) {
+                if (grid[x][y] == '1') {
+                    dfs(x, y, grid);
                     count++;
-                    dfs(x, y, grid, visit);
                 }
             }
         }
-
         return count;
     }
 
-    void dfs(int x, int y, vector<vector<char>>& grid, vector<vector<bool>>& visit) {
+    void dfs(int x, int y, vector<vector<char>>& grid) {
+        if (grid[x][y] == '0') {
+            return;
+        }
 
-        visit[x][y] = true;
+        grid[x][y] = '0';
 
         // up
-        if (x-1 >= 0 && grid[x-1][y] == '1' && visit[x-1][y] == false) {
-            dfs(x-1, y, grid, visit);
+        if (x-1 >= 0) {
+            dfs(x-1, y, grid);
         }
 
         // right
-        if (y+1 < grid[0].size() && grid[x][y+1] == '1' && visit[x][y+1] == false) {
-            dfs(x, y+1, grid, visit);
+        if (y+1 < grid[0].size()) {
+            dfs(x, y+1, grid);
         }
 
         // down
-        if (x+1 < grid.size() &&  grid[x+1][y] == '1' && visit[x+1][y] == false) {
-            dfs(x+1, y, grid, visit);
+        if (x+1 < grid.size()) {
+            dfs(x+1, y, grid);
         }
 
         // left
-        if (y-1 >= 0 && grid[x][y-1] == '1' && visit[x][y-1] == false) {
-            dfs(x, y-1, grid, visit);
+        if (y-1 >= 0) {
+            dfs(x, y-1, grid);
         }
     }
 };
+
 
 int main()
 {
