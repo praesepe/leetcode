@@ -1,27 +1,32 @@
 class Solution {
 public:
     bool isValid(string s) {
-
-        map<char, char> mp = {
-            {'(', ')'},
-            {'{', '}'},
-            {'[', ']'}
-        };
-
         stack<char> st;
+        map<char, char> map = {{'(', ')'},
+                               {'[', ']'},
+                               {'{', '}'}};
 
-        for (int i = 0; i < s.length(); i++) {
-            if (mp.find(s[i]) != mp.end()) {
-                st.push(s[i]);
+        for (char c: s) {
+            if (map.find(c) != map.end()) {
+                st.push(c);
                 continue;
             }
 
-            if (st.empty() || mp[st.top()] != s[i]) {
+            if (st.empty()) {
+                return false;
+            }
+
+            char t = st.top();
+            if (c != map[t]) {
                 return false;
             }
             st.pop();
         }
 
-        return st.empty();
+        if (!st.empty()) {
+            return false;
+        }
+
+        return true;
     }
 };
