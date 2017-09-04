@@ -1,19 +1,24 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        bool exists[256] = {false};
+        int result = 0;
+        vector<int> map(256, 0);
+        int start = 0, end = 0, count = 0;
 
-        int i = 0, len = 0;
-        for (int j = 0; j < s.size(); j++) {
-            while (exists[s[j]]) {
-                exists[s[i]] = false;
-                i++;
+        while (end < s.length()) {
+            if (map[s[end++]]++ == 1) {
+                count++;
             }
-            exists[s[j]] = true;
-            len = max(j - i + 1, len);
+
+            while (count > 0) {
+                if (map[s[start++]]-- == 2) {
+                    count--;
+                }
+            }
+
+            result = max(end - start, result);
         }
 
-        return len;
+        return result;
     }
 };
-
