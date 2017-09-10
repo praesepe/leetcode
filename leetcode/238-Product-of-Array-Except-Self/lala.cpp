@@ -6,11 +6,11 @@ class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
         int size = nums.size();
-        vector<int> result(size, 1);
+        vector<int> result(size);
 
         int left = 1;
         for (int i = 0; i < size; i++) {
-            result[i] *= left;
+            result[i] = left;
             left *= nums[i];
         }
 
