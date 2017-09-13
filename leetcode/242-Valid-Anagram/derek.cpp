@@ -5,20 +5,16 @@ public:
             return false;
         }
 
-        vector<int> count(26, 0);
-        for (auto ch: t) {
-            int idx = ch - 'a';
-            count[idx]++;
+        vector<int> mp(256, 0);
+        for (auto c: t) {
+            mp[c]++;
         }
 
-        int start = 0, end = 0, idx;
+        int start = 0, end = 0;
         while (end < s.length()) {
-            idx = s[end] - 'a';
-            if (count[idx] == 0) {
+            if (mp[s[end++]]-- == 0) {
                 return false;
             }
-            count[idx]--;
-            end++;
         }
 
         return true;
