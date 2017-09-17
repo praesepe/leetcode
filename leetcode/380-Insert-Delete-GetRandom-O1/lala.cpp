@@ -1,14 +1,20 @@
 #include <unordered_set>
-#include <cstdlib>
-#include <ctime>
+#include <climits>
+#include <random>
 
 using namespace std;
 
 class RandomizedSet {
+private:
+    int dice() {
+        return this->_distribution(this->_generator);
+    }
 public:
     /** Initialize your data structure here. */
     RandomizedSet() {
-        srand(time(NULL));
+        random_device rd;
+        this->_generator = default_random_engine(rd());
+        this->_distribution = uniform_int_distribution<int>(0, INT_MAX);
     }
 
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
@@ -37,11 +43,14 @@ public:
     int getRandom() {
         auto itr = this->_s.begin();
 
-        advance(itr, rand() % this->_s.size());
+        advance(itr, this->dice() % this->_s.size());
+
         return *itr;
     }
 private:
     unordered_set<int> _s;
+    default_random_engine _generator;
+    uniform_int_distribution<int> _distribution;
 };
 
 /**
