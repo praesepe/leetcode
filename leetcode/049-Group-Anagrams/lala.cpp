@@ -19,10 +19,11 @@ private:
         return string(key);
         */
 
-        string key;
+        string key(s.size(), NULL);
+        size_t count = 0;
         for (size_t i = 0; i < 26; i++) {
             for (size_t j = 0; j < table[i]; j++) {
-                key += char('a' + i);
+                key[count++] = 'a' + i;
             }
         }
 
