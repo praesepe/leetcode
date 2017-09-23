@@ -7,18 +7,11 @@ using namespace std;
 class Solution {
 private:
     string get_key(string s) {
-        size_t table[26] = {0};
+        uint16_t table[26] = {0};
         for (const auto c : s) table[c - 'a']++;
 
+        return string((char*) table, sizeof(table));
         /*
-         * FIXME: How to define the binary hash function?
-         *
-        char key[sizeof(table)];
-        memcpy(key, table, sizeof(key));
-
-        return string(key);
-        */
-
         string key(s.size(), NULL);
         size_t count = 0;
         for (size_t i = 0; i < 26; i++) {
@@ -28,6 +21,7 @@ private:
         }
 
         return key;
+        */
     }
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
