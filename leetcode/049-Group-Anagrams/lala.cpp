@@ -3,11 +3,10 @@
 #include <string>
 
 using namespace std;
-
 class Solution {
 private:
     string get_key(string s) {
-        uint16_t table[26] = {0};
+        uint8_t table[26] = {0};
         for (const auto c : s) table[c - 'a']++;
 
         return string((char*) table, sizeof(table));
@@ -19,27 +18,24 @@ private:
                 key[count++] = 'a' + i;
             }
         }
-
         return key;
         */
     }
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> umm;
+        vector<vector<string>> result;
+        unordered_map<string, int> umm;
         for (const auto str : strs) {
             string key = this->get_key(str);
             const auto itr = umm.find(key);
-            if (itr == umm.end()) {
-                umm[key] = vector<string>();
-            }
-            umm[key].push_back(str);
-        }
 
-        vector<vector<string>> result;
-        for (auto itr : umm) {
-            result.push_back(itr.second);
+            if (itr == umm.end()) {
+                result.push_back(vector<string>({str}));
+                umm[key] = result.size() - 1;
+            } else {
+                result[itr->second].push_back(str);
+            }
         }
         return result;
-
     }
 };
