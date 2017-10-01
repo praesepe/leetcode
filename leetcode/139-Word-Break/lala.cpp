@@ -26,7 +26,7 @@ public:
         memset(success, 0, sizeof(success));
         success[0] = true;
 
-        // F(i) = F(i - 1) && S[i..|Wj|] == Wj
+        // F(i + |Wj|) = F(i - 1) && S[i..|Wj|] == Wj
         for (size_t i = 0; i < s.size(); i++) {
             if (!success[i]) continue;
 
