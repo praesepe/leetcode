@@ -1,65 +1,65 @@
-#include <iostream>
-#include <string>
-#include <cstdio>
-#include <vector>
-
-using namespace std;
-
 class Solution {
 public:
     int strStr(string haystack, string needle) {
-        int n = haystack.length();
-        int m = needle.length();
-        if (n < m) {
+        // check edge case
+        if (haystack.length() < needle.length()) {
             return -1;
         }
-        if (m == 0) {
+        if (needle.length() == 0) {
             return 0;
         }
+        
+        vector<int> failure = getFailure(needle);
 
-        vector<int> next(m, 0);
-        getNextTable(needle, next);
+        int i = 0;
+        for (int j = 0; j < haystack.length(); j++) {
+            while (i > 0 && needle[i] != haystack[j]) {
+                i = failure[i - 1];
+            }
+            
+            if (needle[i] == haystack[j]) {
+                i++;                
+            }
 
-        int i = 0, j = 0;
-        int result = -1;
-        while (i < n && j < m) {
-            if (j == -1 || haystack[i] == needle[j]) {
-                i++;
-                j++;
-            } else {
-                j = next[j];
+            if (i == needle.length()) {
+                return j - i + 1;
             }
         }
-        if (j == m) {
-            return i - j;
-        }
 
-        return result;
+        return -1;        
     }
 private:
-    void getNextTable(string needle, vector<int>& next) {
-        next[0] = -1;
-        int k = -1;
-        int j = 0;
-        while (j < needle.length() - 1) {
-            if (k == -1 || needle[j] == needle[k]) {
-                j++;
-                k++;
-                next[j] = k;
+    vector<int> getFailure(string needle) {
+
+        // ababad
+        // 001230
+        //
+        //       j
+        // ababa d
+        //   aba bad
+        //       i
+        //
+        //       j
+        // ababa d
+        //     a babad
+        //       i
+
+        vector<int> failure(needle.size(), 0);
+
+        int i = 0;
+        for (int j = 1; j < needle.length(); j++) {
+            while (i > 0 && needle[i] != needle[j]) {
+                i = failure[i-1];
+            }
+
+            if (needle[i] == needle[j]) {
+                i++;
+                failure[j] = i;
             } else {
-                k = next[k];
+                failure[j] = 0;
             }
         }
+
+        return failure;
     }
 };
-
-int main() {
-    string haystack = "12abab3";
-    string needle = "abab";
-
-    Solution slt;
-    int pos = slt.strStr(haystack, needle);
-    cout << pos << endl;
-
-    return 0;
-}
