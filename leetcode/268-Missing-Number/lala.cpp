@@ -3,17 +3,11 @@
 using namespace std;
 
 class Solution {
-private:
-	int originalSum(int n) {
-		return n * (0 + n - 1) / 2;
-	}
 public:
 	int missingNumber(vector<int>& nums) {
-		int sum = 0;
-		for (const auto num : nums) {
-			sum += num;
-		}
+        int expected = (nums.size() + 1) * nums.size() / 2;
+        for (const auto num : nums) expected -= num;
 
-		return this->originalSum(nums.size() + 1) - sum;
+        return expected;
 	}
 };
