@@ -16,15 +16,12 @@ class Solution {
 private:
     void traverse(TreeNode* root, size_t depth, vector<int> &result) {
         if (!root) return;
-        // insert to result
-        if (depth == result.size()) {
-            result.push_back(root->val);
-        } else {
-            result[depth] = root->val;
-        }
 
-        this->traverse(root->left, depth + 1, result);
-        this->traverse(root->right, depth + 1, result);
+		// insert to result
+		if (depth == result.size()) result.push_back(root->val);
+
+		this->traverse(root->right, depth + 1, result);
+		this->traverse(root->left, depth + 1, result);
     }
 public:
     vector<int> rightSideView(TreeNode* root) {
